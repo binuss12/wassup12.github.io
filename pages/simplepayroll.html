@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simple Payroll</title>
+    <style>
+               
+    
+    </style>
+  </head>
+  <body>
+    <div id="content">
+      <h1>Simple Payroll</h1>
+
+      <label for="employeeName">Employee Name:</label>
+      <input type="text" id="employeeName" />
+
+      <label for="daysWorked">Days Worked:</label>
+      <input type="number" id="daysWorked" />
+
+      <label for="dailyRate">Daily Rate:</label>
+      <input type="number" id="dailyRate" />
+
+      <label for="deductionAmount">Deduction Amount:</label>
+      <input type="number" id="deductionAmount" />
+
+      <button onclick="addEmployee()">Add Employee</button>
+
+      <label for="deleteLineNumber">Delete Employee (Enter Line Number):</label>
+      <input type="number" id="deleteLineNumber" />
+
+      <button onclick="deleteEmployee()">Delete Employee</button>
+      <button onclick="eraseData()">Erase Data</button>
+      <button onclick="deleteTableContent()">Delete Table</button>
+
+      <table id="payrollTable">
+        <tr>
+          <th>No.</th>
+          <th>Employee Name</th>
+          <th>Days Worked</th>
+          <th>Daily Rate</th>
+          <th>Gross Pay</th>
+          <th>Deduction Amount</th>
+          <th>Net Pay</th>
+        </tr>
+      </table>
+    </div>
+
+    <script>
+      let payrollList = [];
+
+      function addEmployee() {
+        let employeeName = document.getElementById("employeeName").value;
+        let daysWorked = parseFloat(
+          document.getElementById("daysWorked").value
+        );
+        let dailyRate = parseFloat(document.getElementById("dailyRate").value);
+        let deductionAmount = parseFloat(
+          document.getElementById("deductionAmount").value
+        );
+
+        let grossPay = daysWorked * dailyRate;
+        let netPay = grossPay - deductionAmount;
+
+        let employee = {
+          name: employeeName,
+          daysWorked: daysWorked,
+          dailyRate: dailyRate,
+          grossPay: grossPay,
+          deductionAmount: deductionAmount,
+          netPay: netPay,
+        };
+
+        payrollList.push(employee);
+        displayPayrollTable();
+        clearInputFeilds();
+      }
+
+      function deleteEmployee() {
+        let deleteLineNumber = parseInt(
+          document.getElementById("deleteLineNumber").value
+        );
+
+        if (deleteLineNumber >= 1 && deleteLineNumber <= payrollList.length) {
+          payrollList.splice(deleteLineNumber - 1, 1);
+          displayPayrollTable();
+        } else {
+          alert("Invalid line number. Please enter a valid line number.");
+        }
+      }
+
+      function eraseData() {
+        clearInputFields();
+        displayPayrollTable();
+      }
+
+      function deleteTableContent() {
+        let table = document.getElementById("payrollTable");
+        let rowCount = table.rows.length;
+
+        for (let i = rowCount - 1; i > 0; i--) {
+          table.deleteRow(i);
+        }
+      }
+
+      function displayPayrollTable() {
+        let table = document.getElementById("payrollTable");
+        table.innerHTML =
+          "<tr><th>No.</th><th>Employee Name</th><th>Days Worked</th><th>Daily Rate</th><th>Gross Pay</th><th>Deduction Amount</th><th>Net Pay</th></tr>";
+
+        for (let i = 0; i < payrollList.length; i++) {
+          let employee = payrollList[i];
+          let row = table.insertRow(-1);
+          let cellNo = row.insertCell(0);
+          let cellName = row.insertCell(1);
+          let cellDaysWorked = row.insertCell(2);
+          let cellDailyRate = row.insertCell(3);
+          let cellGrossPay = row.insertCell(4);
+          let cellDeductionAmount = row.insertCell(5);
+          let cellNetPay = row.insertCell(6);
+
+          cellNo.innerHTML = i + 1;
+          cellName.innerHTML = employee.name;
+          cellDaysWorked.innerHTML = employee.daysWorked;
+          cellDailyRate.innerHTML = employee.dailyRate;
+          cellGrossPay.innerHTML = employee.grossPay;
+          cellDeductionAmount.innerHTML = employee.deductionAmount;
+          cellNetPay.innerHTML = employee.netPay;
+        }
+      }
+
+      function clearInputFields() {
+        document.getElementById("employeeName").value = "";
+        document.getElementById("daysWorked").value = "";
+        document.getElementById("dailyRate").value = "";
+        document.getElementById("deductionAmount").value = "";
+        document.getElementById("deleteLineNumber").value = "";
+      }
+    </script>
+    <a href="/index.html" class="home">BACK TO HOMEPAGE</a>
+  </body>
+</html>
+
+   
